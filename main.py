@@ -22,8 +22,11 @@ if __name__ == '__main__':
                 timeout=90,
                 headers={'Authorization': dvmn_token},
                 params={'timestamp': timestamp}
-            ).json()
-            timestamp = response['new_attempts'][0]['timestamp']
+            )
+            if response.ok:
+                response = response.json()
+                if response['status'] == 'found':
+                    timestamp = response['new_attempts'][0]['timestamp']
 
                     text = dedent(f'''
                     Преподаватель проверил работу!
