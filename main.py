@@ -1,3 +1,5 @@
+from textwrap import dedent
+
 import requests
 import telegram
 import os
@@ -23,12 +25,14 @@ if __name__ == '__main__':
             ).json()
             timestamp = response['new_attempts'][0]['timestamp']
 
-            bot.send_message(
-                chat_id=chat_id,
-                text='Преподаватель проверил работу! \n\n'
-                     f'Название урока: {response["new_attempts"][0]["lesson_title"]}\n'
-                     f'Ссылка на урок: {response["new_attempts"][0]["lesson_url"]}'
-            )
+                    text = dedent(f'''
+                    Преподаватель проверил работу!
+                    
+                    Название урока: {response["new_attempts"][0]["lesson_title"]} 
+                    Ссылка на урок: {response["new_attempts"][0]["lesson_url"]}''')
+                    bot.send_message(chat_id=chat_id, text=text)
+                elif response['status'] == 'timeout':
+                    timestamp = response['timestamp_to_request']
         except requests.exceptions.ReadTimeout:
             continue
         except ConnectionError:
