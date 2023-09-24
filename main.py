@@ -1,3 +1,4 @@
+import time
 from textwrap import dedent
 
 import requests
@@ -39,5 +40,5 @@ if __name__ == '__main__':
         except requests.exceptions.ReadTimeout:
             continue
         except ConnectionError:
-            continue
+            time.sleep(60)
 
