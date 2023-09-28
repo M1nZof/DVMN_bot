@@ -25,18 +25,18 @@ if __name__ == '__main__':
                 params={'timestamp': timestamp}
             )
             if response.ok:
-                response = response.json()
-                if response['status'] == 'found':
-                    timestamp = response['new_attempts'][0]['timestamp']
+                response_data = response.json()
+                if response_data['status'] == 'found':
+                    timestamp = response_data['new_attempts'][0]['timestamp']
 
                     text = dedent(f'''
                     Преподаватель проверил работу!
                     
-                    Название урока: {response["new_attempts"][0]["lesson_title"]} 
-                    Ссылка на урок: {response["new_attempts"][0]["lesson_url"]}''')
+                    Название урока: {response_data["new_attempts"][0]["lesson_title"]}
+                    Ссылка на урок: {response_data["new_attempts"][0]["lesson_url"]}''')
                     bot.send_message(chat_id=chat_id, text=text)
-                elif response['status'] == 'timeout':
-                    timestamp = response['timestamp_to_request']
+                elif response_data['status'] == 'timeout':
+                    timestamp = response_data['timestamp_to_request']
         except requests.exceptions.ReadTimeout:
             continue
         except ConnectionError:
